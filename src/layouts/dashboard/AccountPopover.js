@@ -1,30 +1,19 @@
 import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
 // components
 import MenuPopover from '../../components/MenuPopover';
-// mocks_
-import account from '../../_mock/account';
+import account from '../../components/account';
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
-    icon: 'eva:home-fill',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-    linkTo: '#',
-  },
-  {
-    label: 'Settings',
+    label: '비밀번호 변경',
     icon: 'eva:settings-2-fill',
-    linkTo: '#',
+    linkTo: '/home/reset-pass',
   },
 ];
 
@@ -32,15 +21,46 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
-
+  const navigate = useNavigate();
   const [open, setOpen] = useState(null);
+  const [signOut, setSignOut] = useState(false);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-
   const handleClose = () => {
     setOpen(null);
+  };
+  const handleSignOutClose = () => {
+    setSignOut(false);
+  };
+  const handleSignOutOpen = () => {
+    setSignOut(true);
+  };
+
+  // 권한
+  const UserAuthority = sessionStorage.getItem('authority') ? sessionStorage.getItem('authority') : 'GUEST';
+
+  // 로그아웃
+  const Logout = () => {
+    // fetch("/api/user/logout", {
+    // method: "POST",
+    // credentials: "include",
+    // headers: {
+    // "Content-type": "application/json",
+    // },
+    // }).then((response) => {
+    // if (response.ok && response.status === 200) {
+    // sessionStorage.removeItem("authority");
+    // sessionStorage.removeItem("idx");
+    // sessionStorage.removeItem("user_id");
+    // sessionStorage.removeItem("user_name");
+    // sessionStorage.removeItem("idx_ocr");
+    navigate('/login', { replace: true });
+    // } else {
+    // alert("로그아웃 실패. 관리자에게 문의하세요.");
+    // }
+    // });
   };
 
   return (
@@ -81,12 +101,21 @@ export default function AccountPopover() {
         }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {account.displayName}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
-          </Typography>
+          {UserAuthority === 'admin' && (
+            <Typography variant="subtitle2" noWrap>
+              ADMIN
+            </Typography>
+          )}
+          {UserAuthority === 'typist' && (
+            <Typography variant="subtitle2" noWrap>
+              유통사
+            </Typography>
+          )}
+          {UserAuthority === 'GUEST' && (
+            <Typography variant="subtitle2" noWrap>
+              GUEST
+            </Typography>
+          )}
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -101,8 +130,8 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          Logout
+        <MenuItem onClick={Logout} sx={{ m: 1 }}>
+          로그아웃
         </MenuItem>
       </MenuPopover>
     </>

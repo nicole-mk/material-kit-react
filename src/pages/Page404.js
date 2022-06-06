@@ -14,23 +14,23 @@ const ContentStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(12, 0)
+  padding: theme.spacing(12, 0),
 }));
 
 // ----------------------------------------------------------------------
 
 export default function Page404() {
   return (
-    <Page title="404 Page Not Found">
+    <Page title="페이지 오류">
       <Container>
         <ContentStyle sx={{ textAlign: 'center', alignItems: 'center' }}>
           <Typography variant="h3" paragraph>
-            Sorry, page not found!
+            페이지를 찾을 수 없습니다.
           </Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
-            sure to check your spelling.
+            원하시는 결과를 찾을 수 없습니다. 올바른 URL을 입력하였는지 확인하세요. 자세한 내용은 사이트 소유자에게
+            문의하시기 바랍니다.
           </Typography>
 
           <Box
@@ -40,7 +40,7 @@ export default function Page404() {
           />
 
           <Button to="/" size="large" variant="contained" component={RouterLink}>
-            Go to Home
+            HOME으로
           </Button>
         </ContentStyle>
       </Container>
